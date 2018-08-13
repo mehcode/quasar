@@ -506,12 +506,7 @@ project (':quasar-core') {
 		targetCompatibility = '1.8'
 	}
 
-	//        jdk8Jar {
-	//            classifier = 'jdk8'
-	//        }
-
 	jdk8ShadowJar {
-		classifier = 'jdk8'
 	}
 
 	artifacts {
