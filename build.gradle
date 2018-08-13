@@ -476,21 +476,11 @@ project (':quasar-core') {
             }
         }
 
-        def testTask = task("${set.name}Test", type: Test, dependsOn: [shadowJarTask, compileClassloadertestJava]) {
-            testClassesDir = project.sourceSets["${set.name}test"].output.classesDir
-            classpath = project.sourceSets["${set.name}test"].runtimeClasspath
-
-            project.afterEvaluate {
-                jvmArgs "-javaagent:${shadowJarTask.archivePath}" // =vdc
-            }
-        }
-
         artifacts {
             archives shadowJarTask
         }
 
         assemble.dependsOn shadowJarTask
-        check.dependsOn testTask
     }
 
     artifacts {
