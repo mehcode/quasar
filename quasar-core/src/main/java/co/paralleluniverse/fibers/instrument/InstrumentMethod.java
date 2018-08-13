@@ -572,16 +572,16 @@ class InstrumentMethod {
     }
 
     private boolean canInstrumentationBeSkipped(int[] susCallsIndexes) {
+    		if (susCallsIndexes.length == 0) {
+    			db.log(LogLevel.DEBUG, "No callsites to instrument in method %s#%s%s", className, mn.name, mn.desc);
+    			return true;
+    		}
+    	
     		if (optimizationDisabled) {
-	        db.log(LogLevel.INFO, "[OPTIMIZE] Optimization disabled, not examining method %s:%s#%s%s with susCallsIndexes=%s", sourceName, className, mn.name, mn.desc, Arrays.toString(susCallsIndexes));
+	        db.log(LogLevel.DEBUG, "[OPTIMIZE] Optimization disabled, not examining method %s:%s#%s%s with susCallsIndexes=%s", sourceName, className, mn.name, mn.desc, Arrays.toString(susCallsIndexes));
 	        return false;
     		}
     	
-        if (susCallsIndexes.length == 0) {
-            db.log(LogLevel.INFO, "No callsites to instrument in method %s#%s%s", className, mn.name, mn.desc);
-            return true;
-        }
-
         db.log(LogLevel.DEBUG, "[OPTIMIZE] Examining method %s:%s#%s%s with susCallsIndexes=%s", sourceName, className, mn.name, mn.desc, Arrays.toString(susCallsIndexes));
         return isForwardingToSuspendable(susCallsIndexes); // Fully instrumentation-transparent methods
     }
