@@ -68,7 +68,7 @@ public final class QuasarInstrumentor {
     }
 
     @SuppressWarnings("WeakerAccess")
-    public boolean shouldInstrument(String className) {
+    public boolean shouldInstrument(ClassLoader loader, String className) {    		
         if (className != null) {
             className = className.replace('.', '/');
             if (className.startsWith("co/paralleluniverse/fibers/instrument/") && !Debug.isUnitTest())
@@ -86,12 +86,19 @@ public final class QuasarInstrumentor {
             if (isExcluded(className))
                 return false;
         }
+        String loaderClassName  = loader != null ? loader.getClass().getName() : null;
+        if(loaderClassName != null) {
+        	loaderClassName = loaderClassName.replace('.', '/');
+        	if(loaderClassName.startsWith("jdk/nashorn")) {
+        		return false;
+        	}
+        }
         return true;
     }
 
     @SuppressWarnings("WeakerAccess")
     public byte[] instrumentClass(ClassLoader loader, String className, byte[] data) throws IOException {
-        return shouldInstrument(className) ? instrumentClass(loader, className, new ByteArrayInputStream(data), false) : data;
+        return shouldInstrument(loader, className) ? instrumentClass(loader, className, new ByteArrayInputStream(data), false) : data;
     }
 
     @SuppressWarnings("WeakerAccess")

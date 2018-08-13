@@ -185,7 +185,7 @@ public class InstrumentationTask extends Task {
     }
 
     private void instrumentClass(ClassLoader cl, QuasarInstrumentor instrumentor, WorkListEntry entry) {
-        if (!instrumentor.shouldInstrument(entry.name))
+        if (!instrumentor.shouldInstrument(cl, entry.name))
             return;
         try {
             try (FileInputStream fis = new FileInputStream(entry.file)) {
