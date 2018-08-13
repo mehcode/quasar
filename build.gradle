@@ -407,7 +407,7 @@ project (':quasar-core') {
             }
 
             compileClasspath += test.compileClasspath
-            runtimeClasspath += compileClasspath + test.runtimeClasspath
+            runtimeClasspath += jdk8.compileClasspath + test.runtimeClasspath
         }
     }
 
