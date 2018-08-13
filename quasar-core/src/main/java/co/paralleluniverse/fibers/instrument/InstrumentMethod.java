@@ -41,30 +41,15 @@
  */
 package co.paralleluniverse.fibers.instrument;
 
-// import co.paralleluniverse.common.util.SystemProperties;
-import co.paralleluniverse.fibers.Instrumented;
-import co.paralleluniverse.fibers.Stack;
-import static co.paralleluniverse.fibers.instrument.Classes.INSTRUMENTED_DESC;
-import static co.paralleluniverse.fibers.instrument.Classes.EXCEPTION_NAME;
-import static co.paralleluniverse.fibers.instrument.Classes.THROWABLE_NAME;
-import static co.paralleluniverse.fibers.instrument.Classes.RUNTIME_EXCEPTION_NAME;
-import static co.paralleluniverse.fibers.instrument.Classes.SUSPEND_EXECUTION_NAME;
-import static co.paralleluniverse.fibers.instrument.Classes.RUNTIME_SUSPEND_EXECUTION_NAME;
-import static co.paralleluniverse.fibers.instrument.Classes.STACK_NAME;
-import static co.paralleluniverse.fibers.instrument.Classes.UNDECLARED_THROWABLE_NAME;
-import static co.paralleluniverse.fibers.instrument.Classes.isAllowedToBlock;
-import static co.paralleluniverse.fibers.instrument.Classes.blockingCallIdx;
-import static co.paralleluniverse.fibers.instrument.Classes.isYieldMethod;
-import co.paralleluniverse.fibers.instrument.MethodDatabase.SuspendableType;
-import static co.paralleluniverse.fibers.instrument.MethodDatabase.isInvocationHandlerInvocation;
-import static co.paralleluniverse.fibers.instrument.MethodDatabase.isMethodHandleInvocation;
-import static co.paralleluniverse.fibers.instrument.MethodDatabase.isReflectInvocation;
-import static co.paralleluniverse.fibers.instrument.MethodDatabase.isSyntheticAccess;
+import static co.paralleluniverse.fibers.instrument.Classes.*;
+import static co.paralleluniverse.fibers.instrument.MethodDatabase.*;
+
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+
 import org.objectweb.asm.AnnotationVisitor;
 import org.objectweb.asm.Label;
 import org.objectweb.asm.MethodVisitor;
@@ -87,6 +72,12 @@ import org.objectweb.asm.tree.analysis.BasicValue;
 import org.objectweb.asm.tree.analysis.Frame;
 import org.objectweb.asm.tree.analysis.Value;
 
+import co.paralleluniverse.common.util.SystemProperties;
+// import co.paralleluniverse.common.util.SystemProperties;
+import co.paralleluniverse.fibers.Instrumented;
+import co.paralleluniverse.fibers.Stack;
+import co.paralleluniverse.fibers.instrument.MethodDatabase.SuspendableType;
+
 /**
  * Instrument a method to allow suspension
  *
@@ -94,7 +85,7 @@ import org.objectweb.asm.tree.analysis.Value;
  * @author pron
  */
 class InstrumentMethod {
-    private static final boolean optimizationDisabled = false; // SystemProperties.isEmptyOrTrue("co.paralleluniverse.fibers.disableInstrumentationOptimization");
+    private static final boolean optimizationDisabled = SystemProperties.isEmptyOrTrue("co.paralleluniverse.fibers.disableInstrumentationOptimization");
     private static final boolean HANDLE_PROXY_INVOCATIONS = true;
 
     // private final boolean verifyInstrumentation; //
