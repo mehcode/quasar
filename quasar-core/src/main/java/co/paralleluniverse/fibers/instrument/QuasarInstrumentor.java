@@ -115,12 +115,19 @@ public final class QuasarInstrumentor {
                 return false;
             }
         }
+        String loaderClassName  = loader != null ? loader.getClass().getName() : null;
+        if(loaderClassName != null) {
+        	loaderClassName = loaderClassName.replace('.', '/');
+        	if(loaderClassName.startsWith("jdk/nashorn")) {
+        		return false;
+        	}
+        }
         return true;
     }
 
     @SuppressWarnings("WeakerAccess")
     public byte[] instrumentClass(ClassLoader loader, String className, byte[] data) throws IOException {
-        return shouldInstrument(className) ? instrumentClass(loader, className, new ByteArrayInputStream(data), false) : data;
+        return shouldInstrument(loader, className) ? instrumentClass(loader, className, new ByteArrayInputStream(data), false) : data;
     }
 
     @SuppressWarnings("WeakerAccess")

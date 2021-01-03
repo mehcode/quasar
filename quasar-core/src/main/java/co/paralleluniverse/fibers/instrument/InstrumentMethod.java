@@ -63,6 +63,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+
 import org.objectweb.asm.AnnotationVisitor;
 import org.objectweb.asm.Label;
 import org.objectweb.asm.MethodVisitor;
@@ -85,6 +86,12 @@ import org.objectweb.asm.tree.analysis.BasicValue;
 import org.objectweb.asm.tree.analysis.Frame;
 import org.objectweb.asm.tree.analysis.Value;
 
+import co.paralleluniverse.common.util.SystemProperties;
+// import co.paralleluniverse.common.util.SystemProperties;
+import co.paralleluniverse.fibers.Instrumented;
+import co.paralleluniverse.fibers.Stack;
+import co.paralleluniverse.fibers.instrument.MethodDatabase.SuspendableType;
+
 /**
  * Instrument a method to allow suspension
  *
@@ -92,7 +99,7 @@ import org.objectweb.asm.tree.analysis.Value;
  * @author pron
  */
 class InstrumentMethod {
-    private static final boolean optimizationDisabled = false; // SystemProperties.isEmptyOrTrue("co.paralleluniverse.fibers.disableInstrumentationOptimization");
+    private static final boolean optimizationDisabled = SystemProperties.isEmptyOrTrue("co.paralleluniverse.fibers.disableInstrumentationOptimization");
     private static final boolean HANDLE_PROXY_INVOCATIONS = true;
 
     // private final boolean verifyInstrumentation; //
@@ -579,16 +586,16 @@ class InstrumentMethod {
     }
 
     private boolean canInstrumentationBeSkipped(int[] susCallsIndexes) {
-        if (susCallsIndexes.length == 0) {
-            db.log(LogLevel.INFO, "No callsites to instrument in method %s#%s%s", className, mn.name, mn.desc);
-            return true;
-        }
-
-        if (optimizationDisabled) {
-            db.log(LogLevel.DEBUG, "[OPTIMIZE] Optimization disabled, not examining method %s:%s#%s%s with susCallsIndexes=%s", sourceName, className, mn.name, mn.desc, Arrays.toString(susCallsIndexes));
-            return false;
-        }
-
+    		if (susCallsIndexes.length == 0) {
+    			db.log(LogLevel.DEBUG, "No callsites to instrument in method %s#%s%s", className, mn.name, mn.desc);
+    			return true;
+    		}
+    	
+    		if (optimizationDisabled) {
+	        db.log(LogLevel.DEBUG, "[OPTIMIZE] Optimization disabled, not examining method %s:%s#%s%s with susCallsIndexes=%s", sourceName, className, mn.name, mn.desc, Arrays.toString(susCallsIndexes));
+	        return false;
+    		}
+    	
         db.log(LogLevel.DEBUG, "[OPTIMIZE] Examining method %s:%s#%s%s with susCallsIndexes=%s", sourceName, className, mn.name, mn.desc, Arrays.toString(susCallsIndexes));
         return isForwardingToSuspendable(susCallsIndexes); // Fully instrumentation-transparent methods
     }
