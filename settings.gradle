@@ -14,7 +14,3 @@ pluginManagement {
 }
 
 include 'quasar-core'
-include 'quasar-actors'
-include 'quasar-reactive-streams'
-include 'quasar-disruptor'
-include 'quasar-kotlin'
