@@ -42,7 +42,7 @@ subprojects {
 
     ext.drpWizVer = '4.1.0'
     ext.guavaVer  = '29.0-jre'
-    ext.asmVer    = '7.0'
+    ext.asmVer    = '9.0'
     ext.slf4jVer  = '1.7.26'
     ext.osgiVer   = '7.0.0'
 
@@ -151,12 +151,12 @@ subprojects {
             }
         }
     }
-    
+
     test.dependsOn jar
 
     tasks.withType(Test).configureEach {
         useJUnit()
-    
+
         if (project.name != 'quasar-kotlin') {
             moduleOptions {
                 runOnClasspath = true
@@ -378,14 +378,14 @@ project (':quasar-core') {
     apply plugin: 'com.github.johnrengelman.shadow'
 
     ext.moduleName = 'co.paralleluniverse.quasar.core'
-    
+
     // remove default artifact
     configurations.runtimeClasspath.artifacts.with { archives ->
         archives.each {
             archives.remove(it)
         }
     }
-    
+
     [jar]*.enabled = false
 
     sourceSets {
@@ -671,11 +671,11 @@ Bundle-Version: \${project.version}
 
 project (':quasar-actors') {
     //project.evaluationDependsOn(':quasar-core')
-    
+
     apply plugin: 'org.javamodularity.moduleplugin'
 
     ext.moduleName = 'co.paralleluniverse.quasar.actors'
-    
+
     dependencies {
         provided project(path: ':quasar-core', configuration: 'shadowedJar')
         // compile 'org.mutabilitydetector:MutabilityDetector:0.9.2'
@@ -691,10 +691,10 @@ project (':quasar-actors') {
 
 project (':quasar-reactive-streams') {
     //project.evaluationDependsOn(':quasar-core')
-    
+
     apply plugin: 'org.javamodularity.moduleplugin'
     ext.moduleName = 'co.paralleluniverse.quasar.reactivestreams'
-    
+
     dependencies {
         provided project(path: ':quasar-core', configuration: 'shadowedJar')
         implementation "org.reactivestreams:reactive-streams:1.0.2"
@@ -715,7 +715,7 @@ project (':quasar-reactive-streams') {
 
 project (':quasar-disruptor') {
     //project.evaluationDependsOn(':quasar-core')
-     
+
     apply plugin: 'org.javamodularity.moduleplugin'
     ext.moduleName = 'co.paralleluniverse.quasar.disruptor'
 
