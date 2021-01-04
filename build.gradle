@@ -592,20 +592,6 @@ Bundle-Version: \${project.version}
 """
     }
 
-    def validateAgentBundle = tasks.register("validateAgentBundle") {
-        dependsOn agentBundle
-        doLast {
-            String importPackages = fetchManifestAttributeFrom(agentBundle, 'Import-Package')
-            if (importPackages && !containsOnly(importPackages, ['co.paralleluniverse.common.resource'])) {
-                throw new InvalidUserDataException("OSGi bundle for Java agent should only import from Java or itself: " + importPackages)
-            }
-        }
-    }
-
-    agentBundle.configure {
-        it.finalizedBy validateAgentBundle
-    }
-
     test {
         dependsOn = [shadowJar, bundle, agentBundle, compileClassloadertestJava]
         testClassesDirs = project.sourceSets.test.output.classesDirs
