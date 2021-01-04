@@ -227,7 +227,7 @@ public class JavaAgent {
             if (className != null && className.startsWith("clojure/lang/Compiler"))
                 return crazyClojureOnceDisable(loader, className, classBeingRedefined, protectionDomain, classfileBuffer);
 
-            if (!instrumentor.shouldInstrument(loader, className))
+            if (!instrumentor.shouldInstrument(className))
                 return null;
 
             Retransform.beforeTransform(className, classBeingRedefined, classfileBuffer);
