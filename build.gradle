@@ -603,10 +603,10 @@ Bundle-Version: \${project.version}
     }
 
     artifacts {
-        shadowedJar shadowJar
-        archives shadowJar
-        archives agentBundle
-        archives bundle
+        // shadowedJar shadowJar
+        // archives shadowJar
+        // archives agentBundle
+        // archives bundle
         archives sourcesJar
         archives javadocJar
     }
@@ -732,64 +732,64 @@ configure(publishedProjects) { subproject ->
 //
     publishing {
         publications {
-            if (subproject.hasProperty('osgiArtifacts')) {
-                create(subproject.name + '-osgi', MavenPublication) {
-                    subproject.osgiArtifacts.call(it)
-                    alias true
+            // if (subproject.hasProperty('osgiArtifacts')) {
+            //     create(subproject.name + '-osgi', MavenPublication) {
+            //         subproject.osgiArtifacts.call(it)
+            //         alias true
 
-                    groupId subproject.group
-                    artifactId subproject.name + '-osgi'
-                    artifact tasks.sourceJar
-                    artifact tasks.javadocJar
+            //         groupId subproject.group
+            //         artifactId subproject.name + '-osgi'
+            //         artifact tasks.sourceJar
+            //         // artifact tasks.javadocJar
 
-                    pom {
-                        name = subproject.name + '-osgi'
-                        packaging = 'jar'
-                        description = subproject.description
-                        url = subproject.url
+            //         pom {
+            //             name = subproject.name + '-osgi'
+            //             packaging = 'jar'
+            //             description = subproject.description
+            //             url = subproject.url
 
-                        scm {
-                            url = subproject.scmUrl
-                            connection = subproject.scmConnection
-                            developerConnection = subproject.scmConnection
-                        }
-                        licenses {
-                            license {
-                                name = subproject.licenseName1
-                                url = subproject.licenseUrl1
-                                distribution = 'repo'
-                            }
-                            license {
-                                name = subproject.licenseName2
-                                url = subproject.licenseUrl2
-                                distribution = 'repo'
-                            }
-                        }
-                        developers {
-                            developer {
-                                id = 'pron'
-                                name = 'Ron Pressler'
-                            }
-                        }
-                    }
-                    pom.withXml {
-                        Node pomNode = asNode()
-                        pomNode.dependencies.'*'.findAll() {
-                            it.artifactId.text().startsWith('org.ow2.asm')
-                        }.each() {
-                            it.parent().remove(it)
-                        }
-                    }
-                }
-            }
+            //             scm {
+            //                 url = subproject.scmUrl
+            //                 connection = subproject.scmConnection
+            //                 developerConnection = subproject.scmConnection
+            //             }
+            //             licenses {
+            //                 license {
+            //                     name = subproject.licenseName1
+            //                     url = subproject.licenseUrl1
+            //                     distribution = 'repo'
+            //                 }
+            //                 license {
+            //                     name = subproject.licenseName2
+            //                     url = subproject.licenseUrl2
+            //                     distribution = 'repo'
+            //                 }
+            //             }
+            //             developers {
+            //                 developer {
+            //                     id = 'pron'
+            //                     name = 'Ron Pressler'
+            //                 }
+            //             }
+            //         }
+            //         pom.withXml {
+            //             Node pomNode = asNode()
+            //             pomNode.dependencies.'*'.findAll() {
+            //                 it.artifactId.text().startsWith('org.ow2.asm')
+            //             }.each() {
+            //                 it.parent().remove(it)
+            //             }
+            //         }
+            //     }
+            // }
 
             create(subproject.name, MavenPublication) {
                 from components.java
 
                 groupId subproject.group
                 artifactId subproject.name
-                artifact tasks.sourceJar
-                artifact tasks.javadocJar
+                // artifact tasks.sourceJar
+                // artifact tasks.javadocJar
 
                 pom {
                     name = subproject.name
@@ -821,14 +821,14 @@ configure(publishedProjects) { subproject ->
                         }
                     }
                 }
-                pom.withXml {
-                    Node pomNode = asNode()
-                    pomNode.dependencies.'*'.findAll() {
-                        it.artifactId.text().startsWith('org.ow2.asm')
-                    }.each() {
-                        it.parent().remove(it)
-                    }
-                }
+                // pom.withXml {
+                //     Node pomNode = asNode()
+                //     pomNode.dependencies.'*'.findAll() {
+                //         it.artifactId.text().startsWith('org.ow2.asm')
+                //     }.each() {
+                //         it.parent().remove(it)
+                //     }
+                // }
             }
         }
     }
